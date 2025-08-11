@@ -1,0 +1,34 @@
+name: Sync ClickUp to Repo
+
+on:
+  schedule:
+    - cron: "*/30 * * * *" # every 30 min (UTC)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: npm i axios
+
+      - name: Pull from ClickUp
+        env:
+          CLICKUP_TOKEN: ${{ secrets.CLICKUP_TOKEN }}
+          CLICKUP_TEAM_ID: ${{ secrets.CLICKUP_TEAM_ID }}
+        run: node scripts/sync_clickup.js
+
+      - name: Commit any changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(clickup): sync data"
+          file_pattern: clickup/data/** clickup/WORKFLOW.md
