@@ -52,7 +52,6 @@ This agent maintains automated documentation from ClickUp exports, focusing on:
 ## Merge Error Resolution
 
 If merge errors occur:
-
 1. Verify JSON data integrity in `clickup/data/**`
 2. Check template variable syntax `{{VARIABLE}}`
 3. Ensure tables have proper column alignment
@@ -60,10 +59,8 @@ If merge errors occur:
 5. Validate timestamp formats
 
 ## Debug Commands
-
 - `Verify JSON`: Check data file integrity
 - `Test merge`: Dry-run merge without commits
 - `Show variables`: Display all template variables
 
 *Last updated: {{DATE}}*
-
