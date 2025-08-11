@@ -1,0 +1,21 @@
+name: Create ClickUp Task
+on:
+  issues:
+    types: [opened, labeled]
+jobs:
+  make-task:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened' || contains(github.event.issue.labels.*.name, 'clickup')
+    steps:
+      - name: Create task in ClickUp
+        run: |
+          curl -X POST "https://api.clickup.com/api/v2/list/${{ secrets.CLICKUP_LIST_ID }}/task" \
+            -H "Authorization: ${{ secrets.CLICKUP_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d @- <<'JSON'
+          {
+            "name": "${{ github.event.issue.title }}",
+            "description": "${{ github.event.issue.html_url }}\n\n${{ github.event.issue.body }}",
+            "priority": 3
+          }
+          JSON
